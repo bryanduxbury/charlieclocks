@@ -1,3 +1,27 @@
+def arc(signal, rad, from, to, stepsize)
+  delta = (to % 360) - (from % 360)
+  numsteps = (delta / stepsize.to_f).ceil
+  actualstep = delta / numsteps
+  print "wire '#{signal}'"
+  (0..numsteps).each do |stepnum|
+    print " (P #{rad} #{from + stepnum * actualstep})"
+  end
+  puts ";"
+end
+
+def polar(r, theta)
+  "(P #{r} #{theta})"
+end
+
+def wire(signal, from, to)
+  puts "wire '#{signal}' #{from} #{to};"
+end
+
+def via(signal, pos)
+  puts "via '#{signal}' #{pos};"
+end
+
+puts "mark (40 40);"
 puts "rip *;"
 
 # contiguous sections of leds, between all the same "highs"
@@ -53,50 +77,74 @@ end
 
 # connections from control pin resistors to the bus rings
 
-def arc(signal, rad, from, to, stepsize)
-  delta = (to % 360) - (from % 360)
-  numsteps = (delta / stepsize.to_f).ceil
-  actualstep = delta / numsteps
-  print "wire '#{signal}'"
-  (0..numsteps).each do |stepnum|
-    print " (P #{rad} #{from + stepnum * actualstep})"
-  end
-  puts ";"
-end
 
 outer_rad = (30.75 - 3 - 9*1.25)
 inner_rad = (30.75 - 3 - 10*1.25)
 
-puts "wire 'n_1' (P 13.5 #{resistor_angles[1-1]}) (P #{inner_rad} #{resistor_angles[1-1]});"
+wire('n_1', polar(13.5, resistor_angles[1-1]), polar(inner_rad, resistor_angles[1-1]))
 arc("n_1", inner_rad, resistor_angles[1-1], 87, 3)
-puts "wire 'n_1' (P #{inner_rad} 87) (P #{rads[1-1]} 87);"
+wire('n_1', polar(inner_rad, 87), polar(rads[1-1], 87))
+wire('n_1', polar(37.5, 87), polar(32.5, 87))
 
-puts "wire 'n_2' (P 13.5 #{resistor_angles[2-1]}) (P #{outer_rad} #{resistor_angles[2-1]});"
+wire('n_2', polar(13.5, resistor_angles[2-1]), polar(outer_rad, resistor_angles[2-1]))
 arc("n_2", outer_rad, resistor_angles[2-1], 81, 3)
-puts "via 'n_2' (P #{outer_rad} 81);"
-puts "via 'n_2' (P #{rads[2-1]} 81);"
+via('n_2', polar(outer_rad, 81))
+via('n_2', polar(rads[2-1], 81))
+arc('n_2', 37.5, 39, 57, 3)
+wire("n_2", polar(37.5, 39), polar(29, 39))
+via("n_2", polar(29, 39))
+via("n_2", polar(rads[2-1], 39))
+arc('n_2', 34.25, 36, 39, 3)
 
-# puts "wire 'n_3' (P 13.5 #{resistor_angles[3-1]}) (P 16 #{resistor_angles[3-1]});"
-# arc("n_3", 16, 273, resistor_angles[3-1], 3)
+wire('n_3', polar(13.5, resistor_angles[3-1]), polar(outer_rad, resistor_angles[3-1]))
+arc("n_3", outer_rad, 279, resistor_angles[3-1], 3)
+via("n_3", polar(outer_rad, 279))
+via("n_3", polar(rads[3-1], 279))
 
-puts "wire 'n_4' (P 13.5 #{resistor_angles[4-1]}) (P #{inner_rad} #{resistor_angles[4-1]});"
+wire('n_4', polar(13.5, resistor_angles[4-1]), polar(inner_rad, resistor_angles[4-1]))
 arc("n_4", inner_rad, 273, resistor_angles[4-1], 3)
+via("n_4", polar(inner_rad, 273))
+via("n_4", polar(rads[4-1], 273))
 
-puts "wire 'n_5' (P 13.5 #{resistor_angles[5-1]}) (P #{inner_rad} #{resistor_angles[5-1]});"
+wire('n_5', polar(13.5, resistor_angles[5-1]), polar(inner_rad, resistor_angles[5-1]))
 arc("n_5", inner_rad, resistor_angles[5-1], 267, 3)
+via("n_5", polar(inner_rad, 267))
+via("n_5", polar(rads[5-1], 267))
 
-puts "wire 'n_7' (P 13.5 #{resistor_angles[7-1]}) (P #{outer_rad} #{resistor_angles[7-1]});"
+wire('n_6', polar(13.5, resistor_angles[6-1]), polar(outer_rad, resistor_angles[6-1]))
+arc('n_6', outer_rad, resistor_angles[6-1], 261, 3)
+via("n_6", polar(outer_rad, 261))
+via("n_6", polar(rads[6-1], 261))
+
+wire('n_7', polar(13.5, resistor_angles[7-1]), polar(outer_rad, resistor_angles[7-1]))
 arc("n_7", outer_rad, 96, resistor_angles[7-1], 3)
-puts "wire 'n_7' (P #{outer_rad} 96) (P #{rads[7-1]} 96);"
+wire('n_7', polar(outer_rad, 96), polar(rads[7-1], 96))
+arc('n_7', 37.5, 129, 147, 3)
+wire('n_7', polar(37.5, 129), polar(29, 129))
+via("n_7", polar(29, 129))
+via("n_7", polar(rads[7-1], 129))
 
 puts "wire 'n_8' (P 13.5 #{resistor_angles[8-1]}) (P #{inner_rad} #{resistor_angles[8-1]});"
 arc("n_8", inner_rad, 93, resistor_angles[8-1], 3)
 puts "wire 'n_8' (P #{inner_rad} 93) (P #{rads[8-1]} 93);"
 arc("n_8", 37.5 + 1.5, 3, 117, 3)
+[3, 33, 63, 93, 117].each do |theta|
+  wire('n_8', polar(37.5+1.5, theta), polar(37.5, theta))
+end
+wire("n_8", polar(37.5, 93), polar(34.25, 93))
+via("n_8", polar(34.25, 93))
+via("n_8", polar(rads[8-1], 93))
 
 
-puts "wire 'n_9' (P 13.5 90) (P 30.75 90);"
+wire('n_9', polar(13.5, 90), polar(30.75, 90))
 arc("n_9", 37.5 + 1.5, 123, 333, 3)
+[123, 153, 183, 213, 243, 273, 303, 333].each do |theta|
+  wire('n_9', polar(37.5+1.5, theta), polar(37.5, theta))
+end
+arc('n_9', 37.5 - 1.5, 111, 123, 3)
+wire('n_9', polar(37.5-1.5, 111), polar(rads[9-1], 111))
+wire('n_9', polar(37.5-1.5, 123), polar(37.5, 123))
+
 
 # (1..9).to_a.each_with_index do |bus, idx|
 #   if bus == 8
@@ -187,30 +235,30 @@ end
 
 # wires and vias for all of the "hour" leds
 
-([8].product((1..4).to_a) + ([9].product((1..8).to_a))).each_with_index do |led_pair, idx|
-  base_angle = -30 * idx + 90
-  # puts "via 'n_#{led_pair.first}' (P 37.5 #{base_angle + 9});"
-  # puts "via 'n_#{led_pair.first}' (P #{rads[led_pair.first-1]} #{base_angle + 9});"
-  # puts "wire 'n_#{led_pair.first}' (P 37.5 #{base_angle + 3}) (P 37.5 #{base_angle + 9});"
-  # puts "via 'n_#{led_pair.last}' (P 37.5 #{base_angle - 9});"
-  # puts "via 'n_#{led_pair.last}' (P #{rads[led_pair.last-1]} #{base_angle - 9});"
-  # puts "wire 'n_#{led_pair.last}' (P 37.5 #{base_angle - 3}) (P 37.5 #{base_angle - 9});"
-  
-  # puts "change layer top;"
-  # puts "wire 'n_#{led_pair.first}' 0.381 (P 37.6 #{base_angle - 3}) (P 35.6 #{base_angle - 3});"
-  # puts "via 'n_#{led_pair.first}' (P 35.6 #{base_angle - 3});"
-  # puts "via 'n_#{led_pair.first}' (P #{rads[led_pair.first-1]} #{base_angle - 3});"
-  # puts "change layer bottom;"
-  # puts "wire 'n_#{led_pair.first}' 0.381 (P 35.6 #{base_angle - 3}) (P #{rads[led_pair.first-1]} #{base_angle - 3});"
-  # 
-  # puts "change layer top;"
-  # puts "wire 'n_#{led_pair.last}' 0.381 (P 37.6 #{base_angle + 3}) (P 35.6 #{base_angle + 3});"
-  # puts "via 'n_#{led_pair.last}' (P 35.6 #{base_angle + 3});"
-  # puts "via 'n_#{led_pair.last}' (P #{rads[led_pair.last-1]} #{base_angle + 3});"
-  # puts "change layer bottom;"
-  # puts "wire 'n_#{led_pair.last}' 0.381 (P 35.6 #{base_angle + 3}) (P #{rads[led_pair.last-1]} #{base_angle + 3});"
-  
-end
+# ([8].product((1..4).to_a) + ([9].product((1..8).to_a))).each_with_index do |led_pair, idx|
+#   base_angle = -30 * idx + 90
+#   # puts "via 'n_#{led_pair.first}' (P 37.5 #{base_angle + 9});"
+#   # puts "via 'n_#{led_pair.first}' (P #{rads[led_pair.first-1]} #{base_angle + 9});"
+#   # puts "wire 'n_#{led_pair.first}' (P 37.5 #{base_angle + 3}) (P 37.5 #{base_angle + 9});"
+#   # puts "via 'n_#{led_pair.last}' (P 37.5 #{base_angle - 9});"
+#   # puts "via 'n_#{led_pair.last}' (P #{rads[led_pair.last-1]} #{base_angle - 9});"
+#   # puts "wire 'n_#{led_pair.last}' (P 37.5 #{base_angle - 3}) (P 37.5 #{base_angle - 9});"
+#   
+#   # puts "change layer top;"
+#   # puts "wire 'n_#{led_pair.first}' 0.381 (P 37.6 #{base_angle - 3}) (P 35.6 #{base_angle - 3});"
+#   # puts "via 'n_#{led_pair.first}' (P 35.6 #{base_angle - 3});"
+#   # puts "via 'n_#{led_pair.first}' (P #{rads[led_pair.first-1]} #{base_angle - 3});"
+#   # puts "change layer bottom;"
+#   # puts "wire 'n_#{led_pair.first}' 0.381 (P 35.6 #{base_angle - 3}) (P #{rads[led_pair.first-1]} #{base_angle - 3});"
+#   # 
+#   # puts "change layer top;"
+#   # puts "wire 'n_#{led_pair.last}' 0.381 (P 37.6 #{base_angle + 3}) (P 35.6 #{base_angle + 3});"
+#   # puts "via 'n_#{led_pair.last}' (P 35.6 #{base_angle + 3});"
+#   # puts "via 'n_#{led_pair.last}' (P #{rads[led_pair.last-1]} #{base_angle + 3});"
+#   # puts "change layer bottom;"
+#   # puts "wire 'n_#{led_pair.last}' 0.381 (P 35.6 #{base_angle + 3}) (P #{rads[led_pair.last-1]} #{base_angle + 3});"
+#   
+# end
 # # 
 # # range = 360.0
 # # (1..9).each_with_index do |rn, idx|
