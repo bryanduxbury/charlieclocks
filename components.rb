@@ -31,11 +31,16 @@ range = 360.0
 (1..9).to_a.reverse.each_with_index do |rn, idx|
   angle = range / 9 * (idx) + 90
   puts "move RN#{rn} (P 12 #{angle});"
-  puts "rotate =R#{angle} RN#{rn};"
+  if rn==9
+    puts "rotate =R90 RN9;"
+  else
+    puts "rotate =R#{angle+90} RN#{rn};"
+  end
+
 end
 
 names = %w(SCL MISO MOSI RESET VCC GND)
 
 names.each_with_index do |name, idx|
-  puts "move #{name} (P 6.5 #{-60*(idx+1) - 30});"
+  puts "move #{name} (P 8 #{-60*(idx+1) - 30});"
 end
