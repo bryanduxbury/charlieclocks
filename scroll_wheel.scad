@@ -65,4 +65,4 @@ module rotor(inner_radius, outer_radius, pitch, separation, gap) {
   }
 }
 
-rotor(33.5, 39.5, 3, 0.2, 2);
+rotor(30, 35, 2.5, 0.2, 2);

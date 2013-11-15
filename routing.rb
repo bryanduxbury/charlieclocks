@@ -41,7 +41,7 @@ def bottom
 end
 
 puts "mark (40 40);"
-puts "change drill 0.635;"
+puts "change drill 0.3048;"
 puts "set wire_bend 2;"
 puts "set snap_bended off;"
 puts "rip *;"
@@ -173,10 +173,10 @@ arc("n_4", 37.5, 351, 357, 3)
 via("n_4", polar(37.5, 351))
 bottom do
   radial("n_4", 37.5, 37.5 - 1.5, 351)
-  arc("n_4", 37.5 - 1.5, 222, 351, 3)
+  arc("n_4", 37.5 - 1.5, 258, 351, 3)
 end
-via("n_4", polar(37.5 - 1.5, 222))
-radial("n_4", 37.5 - 1.5, 34.5, 222)
+via("n_4", polar(37.5 - 1.5, 258))
+radial("n_4", 37.5 - 1.5, 34.5, 258)
 
 bottom do
   radial("n_4", inner_rad, rads[4-1], 273)
