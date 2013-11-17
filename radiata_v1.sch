@@ -1988,9 +1988,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="0" y1="-6.35" x2="0.508" y2="-5.715" width="0.1524" layer="94"/>
 <wire x1="0.508" y1="-5.715" x2="0.508" y2="-5.207" width="0.1524" layer="94"/>
 <text x="-1.016" y="-6.35" size="1.778" layer="95" rot="R90">&gt;NAME</text>
-<text x="1.27" y="-2.54" size="1.778" layer="97">&gt;TP_SIGNAL_NAME</text>
 <rectangle x1="-0.381" y1="-5.207" x2="0.381" y2="-4.572" layer="94"/>
-<pin name="TP" x="0" y="2.54" visible="off" length="short" direction="in" rot="R270"/>
+<pin name="TP" x="0" y="2.54" visible="pin" length="short" direction="in" rot="R270"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -6881,6 +6880,14 @@ Source: AVX .. aphvc.pdf</description>
 <part name="UPSW" library="SparkFun" deviceset="SWITCH-MOMENTARY-2" device=""/>
 <part name="DOWNSW" library="SparkFun" deviceset="SWITCH-MOMENTARY-2" device=""/>
 <part name="SUPPLY5" library="supply2" deviceset="GND" device=""/>
+<part name="RS1" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="RS2" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="RS3" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="RR1" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="RR2" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="RR3" library="SparkFun" deviceset="RESISTOR" device="1206"/>
+<part name="GND2" library="testpad" deviceset="PTR1" device="TP20SQ"/>
+<part name="V+" library="testpad" deviceset="PTR1" device="TP20SQ"/>
 </parts>
 <sheets>
 <sheet>
@@ -6990,6 +6997,14 @@ Source: AVX .. aphvc.pdf</description>
 <attribute name="NAME" x="294.64" y="55.88" size="1.778" layer="95"/>
 </instance>
 <instance part="SUPPLY5" gate="GND" x="304.8" y="48.26"/>
+<instance part="RS1" gate="G$1" x="299.72" y="30.48"/>
+<instance part="RS2" gate="G$1" x="299.72" y="22.86"/>
+<instance part="RS3" gate="G$1" x="299.72" y="15.24"/>
+<instance part="RR1" gate="G$1" x="317.5" y="30.48"/>
+<instance part="RR2" gate="G$1" x="317.5" y="22.86"/>
+<instance part="RR3" gate="G$1" x="317.5" y="15.24"/>
+<instance part="GND2" gate="G$1" x="254" y="68.58" rot="R270"/>
+<instance part="V+" gate="G$1" x="254" y="78.74" rot="R270"/>
 </instances>
 <busses>
 </busses>
@@ -7641,6 +7656,7 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="261.62" y1="78.74" x2="259.08" y2="78.74" width="0.1524" layer="91"/>
 <wire x1="256.54" y1="78.74" x2="259.08" y2="78.74" width="0.1524" layer="91"/>
 <junction x="259.08" y="78.74"/>
+<pinref part="V+" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <pinref part="P+3" gate="VCC" pin="VCC"/>
@@ -7665,6 +7681,7 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="259.08" y1="68.58" x2="261.62" y2="68.58" width="0.1524" layer="91"/>
 <wire x1="259.08" y1="66.04" x2="259.08" y2="68.58" width="0.1524" layer="91"/>
 <junction x="259.08" y="68.58"/>
+<pinref part="GND2" gate="G$1" pin="TP"/>
 </segment>
 <segment>
 <pinref part="C1" gate="G$1" pin="2"/>
@@ -7881,12 +7898,31 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="292.1" y1="53.34" x2="279.4" y2="53.34" width="0.1524" layer="91"/>
 <label x="279.4" y="53.34" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="RS3" gate="G$1" pin="1"/>
+<wire x1="294.64" y1="15.24" x2="292.1" y2="15.24" width="0.1524" layer="91"/>
+<wire x1="292.1" y1="15.24" x2="292.1" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="292.1" y1="22.86" x2="292.1" y2="30.48" width="0.1524" layer="91"/>
+<wire x1="292.1" y1="30.48" x2="279.4" y2="30.48" width="0.1524" layer="91"/>
+<pinref part="RS1" gate="G$1" pin="1"/>
+<wire x1="294.64" y1="30.48" x2="292.1" y2="30.48" width="0.1524" layer="91"/>
+<junction x="292.1" y="30.48"/>
+<pinref part="RS2" gate="G$1" pin="1"/>
+<wire x1="294.64" y1="22.86" x2="292.1" y2="22.86" width="0.1524" layer="91"/>
+<junction x="292.1" y="22.86"/>
+<label x="279.4" y="30.48" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="PC3" class="0">
 <segment>
 <pinref part="IC2" gate="1" pin="PC3(ADC3/PCINT11)"/>
 <wire x1="365.76" y1="185.42" x2="345.44" y2="185.42" width="0.1524" layer="91"/>
 <label x="365.76" y="185.42" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="RR1" gate="G$1" pin="2"/>
+<wire x1="332.74" y1="30.48" x2="322.58" y2="30.48" width="0.1524" layer="91"/>
+<label x="332.74" y="30.48" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PC4" class="0">
@@ -7895,12 +7931,46 @@ Source: AVX .. aphvc.pdf</description>
 <wire x1="365.76" y1="182.88" x2="345.44" y2="182.88" width="0.1524" layer="91"/>
 <label x="365.76" y="182.88" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="RR2" gate="G$1" pin="2"/>
+<wire x1="332.74" y1="22.86" x2="322.58" y2="22.86" width="0.1524" layer="91"/>
+<label x="332.74" y="22.86" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="PC5" class="0">
 <segment>
 <pinref part="IC2" gate="1" pin="PC5(ADC5/SCL/PCINT13)"/>
 <wire x1="365.76" y1="180.34" x2="345.44" y2="180.34" width="0.1524" layer="91"/>
 <label x="365.76" y="180.34" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="RR3" gate="G$1" pin="2"/>
+<wire x1="332.74" y1="15.24" x2="322.58" y2="15.24" width="0.1524" layer="91"/>
+<label x="332.74" y="15.24" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="ROTOR1" class="0">
+<segment>
+<pinref part="RS1" gate="G$1" pin="2"/>
+<pinref part="RR1" gate="G$1" pin="1"/>
+<wire x1="304.8" y1="30.48" x2="312.42" y2="30.48" width="0.1524" layer="91"/>
+<label x="302.26" y="33.02" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="ROTOR2" class="0">
+<segment>
+<pinref part="RS2" gate="G$1" pin="2"/>
+<pinref part="RR2" gate="G$1" pin="1"/>
+<wire x1="304.8" y1="22.86" x2="312.42" y2="22.86" width="0.1524" layer="91"/>
+<label x="302.26" y="25.4" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="ROTOR3" class="0">
+<segment>
+<pinref part="RS3" gate="G$1" pin="2"/>
+<pinref part="RR3" gate="G$1" pin="1"/>
+<wire x1="304.8" y1="15.24" x2="312.42" y2="15.24" width="0.1524" layer="91"/>
+<label x="302.26" y="17.78" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>

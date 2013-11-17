@@ -31,7 +31,7 @@ def radial(signal, r1, r2, theta)
 end
 
 def via(signal, pos)
-  puts "via '#{signal}' #{pos};"
+  puts "via '#{signal}' round #{pos};"
 end
 
 def bottom
@@ -286,21 +286,12 @@ end
   end
 end
 
-# bottom do
-#   radial("n_8", 34.25, rads[8-1], 93)
-# 
-#   
-# 
-#   
-# 
-#   radial("n_4", 37.5, 29, 339)
-# 
-#   radial("n_3", 29, rads[3-1], 351)
-# 
-#   radial("n_2", 29, 37.5, 291)
-#   radial("n_2", outer_rad, rads[2-1], 81)
-# 
-#   radial("n_1", 37.5-1.5, 29, 345)
-# end
+# connections to scroll rotor
+bottom do
+  radial('rotor1', 30.5, 16, 87)
+  radial('rotor2', 30.5, 16, 210)
+  radial('rotor3', 30.5, 16, 327)
+end
+
 
 puts "rats;"

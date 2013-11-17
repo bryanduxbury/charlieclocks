@@ -1,7 +1,7 @@
 id = 35;
 od = 40;
 triangle_pitch = 4;
-triangle_tip_width = 0.4;
+triangle_tip_width = 0.007 * 25.4 * 2;
 triangle_gap = 4;
 track_spacing = 0.4;
 
@@ -20,13 +20,20 @@ module chain_hull() {
 
 module curved_triangle(r, pitch, separation, gap) {
   assign(num_steps = 36)
-  assign(delta = pitch - 2 * separation - triangle_tip_width)
+  assign(top_d = pitch - 2 * separation)
+  assign(bottom_d = triangle_tip_width)
+  assign(delta = top_d - bottom_d)
+  assign(r_incr = delta / (num_steps-1) / 2)
   assign(b_incr=116/(num_steps - 1))
   render()
-  for (i=[0:(num_steps-1)]) {
+  for (i=[0:(num_steps-2)]) {
     hull() {
-      translate(polar(r, b_incr * i)) circle(r=delta / 2 / num_steps * (num_steps-i), $fn=12);
-      translate(polar(r, b_incr * (i+1))) circle(r=delta / 2 / num_steps * (num_steps-(i+1)), $fn=12);
+      rotate([0, 0, b_incr * i]) 
+        translate([r, 0, 0]) 
+          square(size=[top_d - r_incr * i * 2, 0.01], center=true);
+      rotate([0, 0, b_incr * (i+1)]) 
+        translate([r, 0, 0]) 
+          square(size=[top_d - r_incr * i * 2, 0.01], center=true);
     }
   }
 }
@@ -65,4 +72,5 @@ module rotor(inner_radius, outer_radius, pitch, separation, gap) {
   }
 }
 
-rotor(30, 35, 2.5, 0.2, 2);
+rotate([0, 0, 90]) 
+  rotor(30, 35, 2.5, 0.35, 2);
