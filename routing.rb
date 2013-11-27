@@ -59,7 +59,7 @@ end
 
 rads = []
 (1..9).each_with_index do |bus, idx|
-  rads << 30.75 - 3 - 1.25 * idx
+  rads << 30.75 - 3 - 1 * idx
 end
 rads = rads.reverse
 
@@ -100,11 +100,11 @@ end
 # connections from control pin resistors to the bus rings
 
 
-outer_rad = (30.75 - 3 - 9*1.25)
-inner_rad = (30.75 - 3 - 10*1.25)
+outer_rad = (30.75 - 3 - 9*1)
+inner_rad = (30.75 - 3 - 10*1)
 
-radial('n_1', 12.5, inner_rad, resistor_angles[1-1]-6)
-arc("n_1", inner_rad, resistor_angles[1-1] - 6, 87, 3)
+radial('n_1', 16, inner_rad, resistor_angles[1-1])
+arc("n_1", inner_rad, resistor_angles[1-1], 87, 3)
 wire('n_1', polar(inner_rad, 87), polar(rads[1-1], 87))
 wire('n_1', polar(37.5, 87), polar(32.5, 87))
 arc("n_1", 37.5, 321, 327, 3)
@@ -118,8 +118,8 @@ end
 radial("n_1", 37.5 - 1.5, 34.5, 48)
 
 
-radial('n_2', 12.5, outer_rad, resistor_angles[2-1]-6)
-arc("n_2", outer_rad, resistor_angles[2-1]-6, 81, 3)
+radial('n_2', 16, outer_rad, resistor_angles[2-1])
+arc("n_2", outer_rad, resistor_angles[2-1], 81, 3)
 via('n_2', polar(outer_rad, 81))
 via('n_2', polar(rads[2-1], 81))
 arc('n_2', 37.5, 39, 57, 3)
@@ -141,8 +141,8 @@ bottom do
 end
 
 
-radial('n_3', 12.5, outer_rad, resistor_angles[3-1]+6)
-arc("n_3", outer_rad, 279, resistor_angles[3-1]+6, 3)
+radial('n_3', 16, outer_rad, resistor_angles[3-1])
+arc("n_3", outer_rad, 279, resistor_angles[3-1], 3)
 via("n_3", polar(outer_rad, 279))
 via("n_3", polar(rads[3-1], 279))
 arc("n_3", 37.5-1.5, 351, 27, 3)
@@ -159,8 +159,8 @@ bottom do
   radial("n_3", 29, rads[3-1], 351)
 end
 
-radial('n_4', 12.5, inner_rad, resistor_angles[4-1]+6)
-arc("n_4", inner_rad, 273, resistor_angles[4-1]+6, 3)
+radial('n_4', 16, inner_rad, resistor_angles[4-1])
+arc("n_4", inner_rad, 273, resistor_angles[4-1], 3)
 via("n_4", polar(inner_rad, 273))
 via("n_4", polar(rads[4-1], 273))
 radial("n_4", 37.5 - 1.5, 37.5, 237)
@@ -183,8 +183,8 @@ bottom do
   radial("n_4", 29, rads[4-1], 255)
 end
 
-radial('n_5', 12.5, inner_rad, resistor_angles[5-1]-6)
-arc("n_5", inner_rad, resistor_angles[5-1]-6, 267, 3)
+radial('n_5', 16, inner_rad, resistor_angles[5-1])
+arc("n_5", inner_rad, resistor_angles[5-1], 267, 3)
 via("n_5", polar(inner_rad, 267))
 via("n_5", polar(rads[5-1], 267))
 radial("n_5", 37.5, 29, 207)
@@ -196,8 +196,8 @@ bottom do
   radial("n_5", 29, rads[5-1], 207)
 end
 
-radial('n_6', 12.5, outer_rad, resistor_angles[6-1]- 6)
-arc('n_6', outer_rad, resistor_angles[6-1]-6, 261, 3)
+radial('n_6', 16, outer_rad, resistor_angles[6-1])
+arc('n_6', outer_rad, resistor_angles[6-1], 261, 3)
 via("n_6", polar(outer_rad, 261))
 via("n_6", polar(rads[6-1], 261))
 arc("n_6", 37.5, 159, 177, 3)
@@ -210,8 +210,8 @@ bottom do
   radial("n_6", 29, rads[6-1], 159)
 end
 
-radial('n_7', 12.5, outer_rad, resistor_angles[7-1]+6)
-arc("n_7", outer_rad, 96, resistor_angles[7-1]+6, 3)
+radial('n_7', 16, outer_rad, resistor_angles[7-1])
+arc("n_7", outer_rad, 96, resistor_angles[7-1], 3)
 wire('n_7', polar(outer_rad, 96), polar(rads[7-1], 96))
 arc('n_7', 37.5, 129, 147, 3)
 wire('n_7', polar(37.5, 129), polar(29, 129))
@@ -221,8 +221,8 @@ bottom do
   radial("n_7", 29, rads[7-1], 129)
 end
 
-radial('n_8', 12.5, inner_rad, resistor_angles[8-1]+6)
-arc("n_8", inner_rad, 93, resistor_angles[8-1]+6, 3)
+radial('n_8', 16, inner_rad, resistor_angles[8-1])
+arc("n_8", inner_rad, 93, resistor_angles[8-1], 3)
 puts "wire 'n_8' (P #{inner_rad} 93) (P #{rads[8-1]} 93);"
 arc("n_8", 37.5 + 1.5, 3, 117, 3)
 [3, 33, 63, 93, 117].each do |theta|
@@ -237,7 +237,7 @@ end
 radial('n_8', 29, 36.5, 93)
 
 
-wire('n_9', polar(13.5, 90), polar(30.75, 90))
+wire('n_9', polar(16, 90), polar(30.75, 90))
 arc("n_9", 37.5 + 1.5, 123, 333, 3)
 [123, 153, 183, 213, 243, 273, 303, 333].each do |theta|
   wire('n_9', polar(37.5+1.5, theta), polar(37.5, theta))

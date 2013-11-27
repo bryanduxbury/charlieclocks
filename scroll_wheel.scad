@@ -23,23 +23,24 @@ module curved_triangle(r, pitch, separation, gap) {
   assign(top_d = pitch - 2 * separation)
   assign(bottom_d = triangle_tip_width)
   assign(delta = top_d - bottom_d)
-  assign(r_incr = delta / (num_steps-1) / 2)
+  assign(d_incr = delta / (num_steps-1))
   assign(b_incr=116/(num_steps - 1))
   render()
   for (i=[0:(num_steps-2)]) {
     hull() {
       rotate([0, 0, b_incr * i]) 
         translate([r, 0, 0]) 
-          square(size=[top_d - r_incr * i * 2, 0.01], center=true);
+          square(size=[top_d - d_incr * i, 0.01], center=true);
       rotate([0, 0, b_incr * (i+1)]) 
         translate([r, 0, 0]) 
-          square(size=[top_d - r_incr * i * 2, 0.01], center=true);
+          square(size=[top_d - d_incr * (i+1), 0.01], center=true);
+      echo("blah", top_d - d_incr * (i+1));
     }
   }
 }
 
 module rotor_section(inner_radius, outer_radius, pitch, separation, gap) {
-  assign(rotor_width=outer_radius - inner_radius)
+  !assign(rotor_width=outer_radius - inner_radius)
   assign(triangles_per_side = ceil(rotor_width / pitch))
   intersection() {
     difference() {

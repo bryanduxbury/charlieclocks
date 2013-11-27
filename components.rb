@@ -32,19 +32,40 @@ end
 range = 360.0
 (1..9).to_a.reverse.each_with_index do |rn, idx|
   angle = range / 9 * (idx) + 90
-  puts "move RN#{rn} (P 12 #{angle});"
+  puts "move RN#{rn} (P 14.5 #{angle});"
+  puts "move CN#{rn} (P 9 #{angle});"
   if rn==9
     puts "rotate =R90 RN9;"
   else
-    puts "rotate =R#{angle+90} RN#{rn};"
+    puts "rotate =R#{angle} RN#{rn};"
   end
+  puts "rotate =R#{angle} CN#{rn};"
 end
 
 # these resistors need to be flipped to make the routing work right!
-puts "rotate R180 'RN1';"
-puts "rotate R180 'RN2';"
-puts "rotate R180 'RN5';"
-puts "rotate R180 'RN6';"
+# puts "rotate R180 'RN1';"
+# puts "rotate R180 'RN2';"
+# puts "rotate R180 'RN5';"
+# puts "rotate R180 'RN6';"
+
+(1..9).to_a.reverse.each_with_index do |rn, idx|
+  angle = range / 9 * (idx) + 90
+
+  # puts "mark (40 40); mark (P 14 #{angle});"
+  puts "move NPN#{rn} (P 14.75 #{angle-12});"
+  puts "rotate =R#{angle-90+180 - 12} NPN#{rn};"
+  puts "move PNP#{rn} (P 14.75 #{angle + 12});"
+  puts "rotate =R#{angle-90+180 + 12} PNP#{rn};"
+
+
+  # puts "mark (40 40); mark (P 14 #{angle});"
+  # puts "move NPN#{rn} (P 3.25 #{angle-120});"
+  # puts "rotate =R#{angle-90+180} NPN#{rn};"
+  # puts "move PNP#{rn} (P 3.25 #{angle + 120});"
+  # puts "rotate =R#{angle-90+180} PNP#{rn};"
+end
+
+puts "mark (40 40);"
 
 names = %w(SCL MISO MOSI RESET VCC GND)
 
