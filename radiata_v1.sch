@@ -11282,7 +11282,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <part name="SUPPLY2" library="supply2" deviceset="GND" device=""/>
 <part name="MISO" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
 <part name="MOSI" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
-<part name="SCL" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
+<part name="SCK" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
 <part name="RESET" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
 <part name="VCC" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
 <part name="GND" library="testpad" deviceset="PTR1" device="TP19R" value="PTR1TP19R"/>
@@ -11305,50 +11305,51 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <part name="GND2" library="testpad" deviceset="PTR1" device="TP20SQ"/>
 <part name="V+" library="testpad" deviceset="PTR1" device="TP20SQ"/>
 <part name="NPN1" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP1" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP1" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN1" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY1" library="supply2" deviceset="GND" device=""/>
 <part name="P+1" library="supply1" deviceset="VCC" device=""/>
 <part name="P+4" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN2" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP2" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP2" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN2" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY6" library="supply2" deviceset="GND" device=""/>
 <part name="P+5" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN3" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP3" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP3" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="SUPPLY7" library="supply2" deviceset="GND" device=""/>
 <part name="CN3" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="NPN4" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP4" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP4" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN4" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY8" library="supply2" deviceset="GND" device=""/>
 <part name="P+6" library="supply1" deviceset="VCC" device=""/>
 <part name="P+7" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN5" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP5" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP5" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN5" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY9" library="supply2" deviceset="GND" device=""/>
 <part name="P+8" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN6" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP6" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP6" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="SUPPLY10" library="supply2" deviceset="GND" device=""/>
 <part name="CN6" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="NPN7" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP7" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP7" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN7" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY11" library="supply2" deviceset="GND" device=""/>
 <part name="P+9" library="supply1" deviceset="VCC" device=""/>
 <part name="P+10" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN8" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP8" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP8" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="CN8" library="rcl" deviceset="R-US_" device="M0805"/>
 <part name="SUPPLY12" library="supply2" deviceset="GND" device=""/>
 <part name="P+11" library="supply1" deviceset="VCC" device=""/>
 <part name="NPN9" library="transistor" deviceset="*-NPN-" device="SOT23-BEC" technology="MMBT2222ALT1"/>
-<part name="PNP9" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT540LT1"/>
+<part name="PNP9" library="transistor" deviceset="*-PNP-" device="SOT23-BEC" technology="MMBT2907ALT1"/>
 <part name="SUPPLY13" library="supply2" deviceset="GND" device=""/>
 <part name="CN9" library="rcl" deviceset="R-US_" device="M0805"/>
+<part name="C3" library="rcl" deviceset="C-US" device="C0603"/>
 </parts>
 <sheets>
 <sheet>
@@ -11440,7 +11441,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <instance part="SUPPLY2" gate="GND" x="96.52" y="180.34"/>
 <instance part="MISO" gate="G$1" x="220.98" y="139.7"/>
 <instance part="MOSI" gate="G$1" x="226.06" y="142.24"/>
-<instance part="SCL" gate="G$1" x="215.9" y="137.16"/>
+<instance part="SCK" gate="G$1" x="215.9" y="137.16"/>
 <instance part="RESET" gate="G$1" x="144.78" y="198.12" rot="R270"/>
 <instance part="VCC" gate="G$1" x="101.6" y="195.58" rot="R90"/>
 <instance part="GND" gate="G$1" x="101.6" y="185.42" rot="R90"/>
@@ -11565,6 +11566,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 </instance>
 <instance part="SUPPLY13" gate="GND" x="254" y="48.26"/>
 <instance part="CN9" gate="G$1" x="243.84" y="60.96"/>
+<instance part="C3" gate="G$1" x="149.86" y="154.94"/>
 </instances>
 <busses>
 </busses>
@@ -12231,6 +12233,9 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="IC2" gate="1" pin="VCC@2"/>
 <wire x1="152.4" y1="167.64" x2="149.86" y2="167.64" width="0.1524" layer="91"/>
 <junction x="149.86" y="167.64"/>
+<pinref part="C3" gate="G$1" pin="1"/>
+<wire x1="149.86" y1="162.56" x2="149.86" y2="157.48" width="0.1524" layer="91"/>
+<junction x="149.86" y="162.56"/>
 </segment>
 <segment>
 <pinref part="NPN1" gate="G$1" pin="C"/>
@@ -12300,6 +12305,9 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 <pinref part="IC2" gate="1" pin="GND@1"/>
 <wire x1="152.4" y1="142.24" x2="149.86" y2="142.24" width="0.1524" layer="91"/>
 <junction x="149.86" y="142.24"/>
+<pinref part="C3" gate="G$1" pin="2"/>
+<wire x1="149.86" y1="149.86" x2="149.86" y2="147.32" width="0.1524" layer="91"/>
+<junction x="149.86" y="147.32"/>
 </segment>
 <segment>
 <pinref part="UPSW" gate="G$1" pin="2"/>
@@ -12380,7 +12388,7 @@ BF959 corrected 2008.03.06&lt;br&gt;</description>
 </net>
 <net name="N$6" class="0">
 <segment>
-<pinref part="SCL" gate="G$1" pin="TP"/>
+<pinref part="SCK" gate="G$1" pin="TP"/>
 <pinref part="IC2" gate="1" pin="PB5(SCK/PCINT5)"/>
 <wire x1="215.9" y1="139.7" x2="213.36" y2="139.7" width="0.1524" layer="91"/>
 </segment>
