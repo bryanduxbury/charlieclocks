@@ -1,9 +1,5 @@
-id = 35;
-od = 40;
-triangle_pitch = 4;
-triangle_tip_width = 0.007 * 25.4 * 2;
-triangle_gap = 4;
-track_spacing = 0.4;
+line_width = 0.01;
+triangle_tip_width = 0.007 * 25.4 * 2 - line_width;
 
 function polar(radius, theta) = [radius * cos(theta), radius * sin(theta)];
 
@@ -20,7 +16,7 @@ module chain_hull() {
 
 module curved_triangle(r, pitch, separation, gap) {
   assign(num_steps = 36)
-  assign(top_d = pitch - 2 * separation)
+  assign(top_d = pitch - 2 * separation - line_width)
   assign(bottom_d = triangle_tip_width)
   assign(delta = top_d - bottom_d)
   assign(d_incr = delta / (num_steps-1))
@@ -30,17 +26,16 @@ module curved_triangle(r, pitch, separation, gap) {
     hull() {
       rotate([0, 0, b_incr * i]) 
         translate([r, 0, 0]) 
-          square(size=[top_d - d_incr * i, 0.01], center=true);
+          square(size=[top_d - d_incr * i, 0.1], center=true);
       rotate([0, 0, b_incr * (i+1)]) 
         translate([r, 0, 0]) 
           square(size=[top_d - d_incr * (i+1), 0.01], center=true);
-      echo("blah", top_d - d_incr * (i+1));
     }
   }
 }
 
 module rotor_section(inner_radius, outer_radius, pitch, separation, gap) {
-  !assign(rotor_width=outer_radius - inner_radius)
+  assign(rotor_width=outer_radius - inner_radius)
   assign(triangles_per_side = ceil(rotor_width / pitch))
   intersection() {
     difference() {
@@ -53,7 +48,7 @@ module rotor_section(inner_radius, outer_radius, pitch, separation, gap) {
           // echo("r", inner_radius + i * pitch);
           curved_triangle(inner_radius + i * pitch, pitch, separation, gap);
         }
-        
+
         rotate([180, 0, 0]) 
         for (i=[0:triangles_per_side-1]) {
           // echo("r", inner_radius + i * pitch);
