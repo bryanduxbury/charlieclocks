@@ -67,10 +67,10 @@ end
 
 puts "mark (40 40);"
 
-names = %w(SCL MISO MOSI RESET VCC GND)
+names = %w(RESET GND VCC MOSI MISO SCK)
 
 names.each_with_index do |name, idx|
-  puts "move #{name} (P 8 #{-60*(idx+1) - 30});"
+  puts "move #{name} (P 8 #{90 + (idx * 60)});"
 end
 
 puts "mark (40 40);"
@@ -108,3 +108,28 @@ puts "move 'v+' (P 3 180);"
 puts "rotate =MR0 'v+';"
 puts "move 'gnd2' (P 3 0);"
 puts "rotate =MR0 'gnd2';"
+
+# crystal loading caps and vcc decoupling cap
+puts "mark (40 40);"
+puts "move 'c3' (P 4 90);"
+puts "move 'c1' (P 4 210);"
+puts "rotate =MR60 'c1';"
+puts "move 'c2' (P 4 330);"
+puts "rotate =MR300 'c2';"
+
+# signature!
+puts "change layer bottom;"
+puts "change ratio 20;"
+
+def text_arc(str, rad, start_angle, step)
+  str.split("").each_with_index do |char, idx|
+    next if char == " "
+    angle = start_angle + idx * step
+    # textangle = start_angle - idx * incr
+    textangle = 90 - angle
+    puts "text '#{char}' MR#{textangle} (P #{rad} #{angle});"
+  end
+end
+
+text_arc("radiata v1 11-29-2013", 28, 42, 2)
+text_arc("bryan duxbury", 25, 50, 2)
