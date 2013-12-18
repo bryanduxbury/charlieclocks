@@ -66,9 +66,9 @@ module sot23() {
 }
 
 module switch(args) {
-  translate([0, 0, 1.5]) {
+  translate([0, 0, 1.8]) {
     color("gray")
-    cube(size=[6, 6, 3], center=true);
+    cube(size=[6, 6, 3.6], center=true);
     
     color("black")
     translate([0, 0, 3]) cylinder(r=1.1, h=6, center=true, $fn=16);
@@ -120,6 +120,12 @@ module pcba() {
     
     for (i=[30, 150]) {
       rotate([0, 0, i]) translate([13, 0, 1.6/2]) switch();
+    }
+    
+    color("black")
+    for (i=[0:5]) {
+      rotate([0, 0, 60 * i + 90]) 
+        translate([8, 0, 1.65]) cylinder(r=1, h=0.1, center=true, $fn=12);
     }
     
   }
