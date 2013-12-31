@@ -10,13 +10,16 @@ public:
 
   void calibrate();
 
-  // Sample the touch electrode a number of times and return the result with 
-  // respect to the calibration value.
-  int16_t measure();
-  
+  // Sample the touch electrode a number of times and return a result. Most 
+  // noise should be filtered, so nonzero values represent actual signal.
+  uint16_t measure();
+
   // Sample the touch electrode a number of times, and then return the result 
-  // mapped onto a normalized value 0 <= x <= 255.
+  // mapped onto a normalized value 0 <= x <= 255. The maximum value is learned
+  // over time from actual values.
   uint8_t measureNormalized();
+
+  // deprecated
   void setRange(uint16_t min, uint16_t max);
 
 private:
@@ -26,8 +29,8 @@ private:
   uint8_t adc_pin;
   uint8_t num_samples;
 
-  int16_t calibration_value;
-  uint16_t min, max;
+  uint16_t touch_threshold;
+  uint16_t max;
 
   uint16_t measureInternal();
   void enablePullup();

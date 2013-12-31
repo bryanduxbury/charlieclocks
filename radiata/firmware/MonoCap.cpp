@@ -10,8 +10,8 @@ MonoCap::MonoCap(uint8_t pin, uint8_t num_samples) {
   this->portmask = digitalPinToBitMask(pin);
   this->adc_pin = pin - 14;
   this->num_samples = num_samples;
-  min = 0;
-  max = 0;
+  // min = 0;
+  max = 1;
 }
 
 void MonoCap::init() {
@@ -24,41 +24,42 @@ void MonoCap::init() {
   ADCSRA |= (1<<ADEN); //enable ADC
 }
 
-// attempt to learn the noise floor by taking the max of a series of quick 
-// samples
 void MonoCap::calibrate() {
-  calibration_value = 0;
-  uint16_t cv = 0;
-
-  for (int i = 0; i < 10; i++) {
-    uint16_t measurement = measure();
-    if (measurement > cv) {
-      cv = measurement;
-    }
+  // take 30 samples from the sensor
+  uint16_t samples[30] = {0};
+  uint32_t sum = 0;
+  for (int i = 0; i < 30; i++) {
+    samples[i] = measure();
+    sum += samples[i];
   }
-  // cv = 0;
-  // Serial.print("new calibration value: ");
-  // Serial.println(cv);
-  this->calibration_value = cv;
+
+  // compute the mean. this is the average untouched value the sensor will return.
+  uint16_t mean = sum / 30;
+
+  // compute the sum of the squared differences between samples and mean
+  uint16_t squared_sum = 0;
+  for (int i = 0; i < 30; i++) {
+    int32_t mean_diff = (int32_t)samples[i] - mean;
+    squared_sum += mean_diff * mean_diff;
+  }
+
+  // we can now compute the standard deviation of the distribution.
+  uint16_t stdev = sqrt(squared_sum / 30);
+  
+  // we set the minimum touched threshold at mean + 3 sigmas. this means that
+  // there's only a ~1.5% chance that a value above it is random noise, and 
+  // it's probably a touch.
+  touch_threshold = mean + stdev * 3;
 }
 
-int16_t MonoCap::measure() {
+uint16_t MonoCap::measure() {
   int16_t sum = 0;
   for (int i = 0; i < num_samples; i++) {
     uint16_t thisMeasurement = measureInternal();
-    // Serial.print(thisMeasurement);
-    // Serial.print(" ");
     sum += thisMeasurement;
   }
-  // Serial.println();
-  // Serial.print(">");
-  // Serial.print("Num samples: ");
-  // Serial.print(num_samples);
-  // Serial.print(" Value: ");
-  // Serial.print(sum);
-  // Serial.print(" vs calibration: ");
-  // Serial.println(calibration_value);
-  return MAX(0, sum - calibration_value);
+
+  return MAX(0, sum - (int16_t)touch_threshold);
 }
 
 
@@ -70,13 +71,11 @@ uint8_t MonoCap::measureNormalized() {
   if (measurement > max) max = measurement;
 
   // convert the measurement into a value 0 <= x <= 255
-  // TODO: seems like the CLAMP call doesn't make sense if we're tracking 
-  // global min/max
-  return (uint8_t)((CLAMP(measurement, min, max) - min) / ((float) max - min) * 255);
+  return (uint8_t)((float)measurement / max * 255);
 }
 
 void MonoCap::setRange(uint16_t min, uint16_t max) {
-  this->min = min;
+  // this->min = min;
   this->max = max;
 }
 

@@ -36,15 +36,15 @@ void setup() {
   Timer1.attachInterrupt(tickISR, 20);
 
   electrode90.init();
-  // electrode90.calibrate();
-  electrode90.setRange(8050, 9500);
+  electrode90.calibrate();
+  // electrode90.setRange(8050, 9500);
   // electrode90.measureNormalized();
   electrode210.init();
-  // electrode210.calibrate();
+  electrode210.calibrate();
   // electrode210.measureNormalized();
   // electrode210.setRange(8000, 9500);
   electrode330.init();
-  // electrode330.calibrate();
+  electrode330.calibrate();
   // electrode330.measureNormalized();
   // electrode330.setRange(8000, 9500);
 }
@@ -52,8 +52,8 @@ void setup() {
 void loop() {
   // testSequence();
   // fastStrobe();
-  touchTest();
-  // wheelTest();
+  // touchTest();
+  wheelTest();
 }
 
 void wheelTest() {
@@ -88,19 +88,40 @@ void wheelTest() {
 void touchTest() {
   while (true) {
     uint8_t val = electrode90.measureNormalized();
+    // displayByte(val);
     for (int i = 0; i < 60; i++) {
       if (i < val / (255.0 / 60)) {
         plex.setDuty(mins2leds[i], DUTY_MAX);
       } else {
         plex.setDuty(mins2leds[i], 0);
       }
-
+    
       // plex.setDuty(mins2leds[i * 3 + 1], DUTY_MAX);
       // plex.setDuty(mins2leds[i * 3 + 2], DUTY_MAX);
     }
 
     delay(100);
     // plex.clear();
+  }
+}
+
+void displayByte(uint8_t val) {
+  uint8_t x = val;
+
+  for (int i = 0; i < val % 10; i++) {
+    plex.setDuty(mins2leds[i + 20], DUTY_MAX);
+  }
+  
+  val /= 10;  
+
+  for (int i = 0; i < val % 10; i++) {
+    plex.setDuty(mins2leds[i + 10], DUTY_MAX);
+  }
+
+  val /= 10;
+
+  for (int i = 0; i < val % 10; i++) {
+    plex.setDuty(mins2leds[i + 0], DUTY_MAX);
   }
 }
 
