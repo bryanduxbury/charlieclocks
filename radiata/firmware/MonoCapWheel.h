@@ -3,7 +3,7 @@
 
 #include "MonoCap.h"
 
-#define MIN_TOUCH_THRESHOLD 25
+#define MIN_TOUCH_THRESHOLD 50
 #define NOT_TOUCHED -1
 
 class MonoCapWheel {

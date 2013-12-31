@@ -1,5 +1,9 @@
 #include "MonoCap.h"
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+#define CLAMP(x, min, max) (MAX(MIN((x), (max)), (min)))
+
 MonoCap::MonoCap(uint8_t pin, uint8_t num_samples) {
   this->pin = pin;
   this->port = portOutputRegister(digitalPinToPort(pin));
@@ -20,19 +24,21 @@ void MonoCap::init() {
   ADCSRA |= (1<<ADEN); //enable ADC
 }
 
+// attempt to learn the noise floor by taking the max of a series of quick 
+// samples
 void MonoCap::calibrate() {
   calibration_value = 0;
-  uint16_t cv = num_samples * 1024;
+  uint16_t cv = 0;
 
   for (int i = 0; i < 10; i++) {
     uint16_t measurement = measure();
-    if (measurement < cv) {
+    if (measurement > cv) {
       cv = measurement;
     }
   }
   // cv = 0;
-  Serial.print("new calibration value: ");
-  Serial.println(cv);
+  // Serial.print("new calibration value: ");
+  // Serial.println(cv);
   this->calibration_value = cv;
 }
 
@@ -52,15 +58,20 @@ int16_t MonoCap::measure() {
   // Serial.print(sum);
   // Serial.print(" vs calibration: ");
   // Serial.println(calibration_value);
-  return sum - calibration_value;
+  return MAX(0, sum - calibration_value);
 }
 
-#define MAX(x, y) ((x) > (y) ? (x) : (y))
-#define MIN(x, y) ((x) < (y) ? (x) : (y))
-#define CLAMP(x, min, max) (MAX(MIN((x), (max)), (min)))
 
 uint8_t MonoCap::measureNormalized() {
   uint16_t measurement = measure();
+
+  // adjust min and max to account for global min/max 
+  // if (measurement < min) min = measurement;
+  if (measurement > max) max = measurement;
+
+  // convert the measurement into a value 0 <= x <= 255
+  // TODO: seems like the CLAMP call doesn't make sense if we're tracking 
+  // global min/max
   return (uint8_t)((CLAMP(measurement, min, max) - min) / ((float) max - min) * 255);
 }
 

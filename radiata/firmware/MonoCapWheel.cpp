@@ -21,30 +21,37 @@ int16_t MonoCapWheel::getOrientation() {
     return NOT_TOUCHED;
   }
 
-  // DEBUG("l:", leftVal);
-  // DEBUG("r:", rightVal);
-  // DEBUG("o:", outerVal);
-
   // TODO: are all the electrodes of approximately equal values? 
   // return ALL_TOUCHED;
+
+  // if (IS_MAX(e1Val, e2Val, e3Val)) {
+  //   // touch is centered on e1
+  //   // float neighborProportions = (float) e2Val / e3Val;
+  //   // if (neighborProportions )
+  //   if (e2Val > e3Val) {
+  //     return 120 * (((float) e1Val) / (e1Val + e2Val));
+  //   } else {
+  //     return 240 + 120 * (((float) e1Val) / (e1Val + e2Val));
+  //   }
+  // } else if (IS_MAX(e2Val, e1Val, e3Val)) {
+  //   // touch is centered on e2
+  // } else {
+  //   // touch is centered on e3
+  // }
 
   uint16_t v12 = (uint16_t)e1Val + e2Val;
   uint16_t v23 = (uint16_t)e2Val + e3Val;
   uint16_t v13 = (uint16_t)e1Val + e3Val;
-
-  // DEBUG("lr:", lr);
-  // DEBUG("lo:", lo);
-  // DEBUG("ro:", ro);
-
+  
   int16_t result = 0;
-
+  
   if (IS_MAX(v12, v23, v13)) {
     // e1/e2 interaction
     float proportion = (float)e2Val / v12;
     result = proportion * 120;
   } else if (IS_MAX(v13, v12, v23)) {
     // e1/e3 interaction
-    float proportion = (float)e1Val / v13;
+    float proportion = (float)e3Val / v13;
     result = 360 - proportion * 120; 
   } else {
     // e2/e3 interaction

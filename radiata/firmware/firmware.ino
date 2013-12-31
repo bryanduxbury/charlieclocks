@@ -36,39 +36,52 @@ void setup() {
   Timer1.attachInterrupt(tickISR, 20);
 
   electrode90.init();
-  electrode90.setRange(8000, 9500);
+  // electrode90.calibrate();
+  electrode90.setRange(8050, 9500);
+  // electrode90.measureNormalized();
   electrode210.init();
-  electrode210.setRange(8000, 9500);
+  // electrode210.calibrate();
+  // electrode210.measureNormalized();
+  // electrode210.setRange(8000, 9500);
   electrode330.init();
-  electrode330.setRange(8000, 9500);
+  // electrode330.calibrate();
+  // electrode330.measureNormalized();
+  // electrode330.setRange(8000, 9500);
 }
 
 void loop() {
   // testSequence();
   // fastStrobe();
-  // touchTest();
-  wheelTest();
+  touchTest();
+  // wheelTest();
 }
 
 void wheelTest() {
+  int lastOn = -1;
   while (true) {
-    int16_t orientation = wheel.getOrientation();
-
-    if (orientation == NOT_TOUCHED) {
-      // plex.clear();
-    } else {
-      plex.setDuty(mins2leds[orientation / 6], DUTY_MAX);
-      delay(100);
-      plex.setDuty(mins2leds[orientation / 6], 0);
-      // for (int i = 0; i < 60; i++) {
-      //         if (i < orientation / 6) {
-      //           plex.setDuty(mins2leds[i], DUTY_MAX);
-      //         } else {
-      //           plex.setDuty(mins2leds[i], 0);
-      //         }
-      //       }
-    }
     delay(100);
+
+    if (lastOn != -1) {
+      plex.setDuty(mins2leds[lastOn], 0);
+      lastOn = -1;
+    }
+
+    int16_t o1 = wheel.getOrientation();
+    int16_t o2 = wheel.getOrientation();
+    int16_t o3 = wheel.getOrientation();
+
+    if (o1 == NOT_TOUCHED || o2 == NOT_TOUCHED || o3 == NOT_TOUCHED) {
+      continue;
+    }
+
+    int16_t orientation = (o1 + o2 + o3) / 3;
+
+    if (orientation != NOT_TOUCHED) {
+      lastOn = orientation / 6;
+      plex.setDuty(mins2leds[orientation / 6], DUTY_MAX);
+    } else {
+      lastOn = -1;
+    }
   }
 }
 
@@ -76,7 +89,7 @@ void touchTest() {
   while (true) {
     uint8_t val = electrode90.measureNormalized();
     for (int i = 0; i < 60; i++) {
-      if (i < val / 2) {
+      if (i < val / (255.0 / 60)) {
         plex.setDuty(mins2leds[i], DUTY_MAX);
       } else {
         plex.setDuty(mins2leds[i], 0);

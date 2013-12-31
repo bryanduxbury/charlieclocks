@@ -26,7 +26,7 @@ private:
   uint8_t adc_pin;
   uint8_t num_samples;
 
-  uint16_t calibration_value;
+  int16_t calibration_value;
   uint16_t min, max;
 
   uint16_t measureInternal();
