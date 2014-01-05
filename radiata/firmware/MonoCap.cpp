@@ -10,18 +10,24 @@ MonoCap::MonoCap(uint8_t pin, uint8_t num_samples) {
   this->portmask = digitalPinToBitMask(pin);
   this->adc_pin = pin - 14;
   this->num_samples = num_samples;
-  // min = 0;
   max = 1;
 }
 
 void MonoCap::init() {
   pinMode(pin, INPUT);
-  ADMUX  |= (1<<REFS0); //reference AVCC (5v)
 
-  ADCSRA |= (1<<ADPS2)|(1<<ADPS1); //clockiv 64
-  //final clock 8MHz/64 = 125kHz
+  // TODO: move the rest of this stuff into a global init?
 
-  ADCSRA |= (1<<ADEN); //enable ADC
+  //reference AVCC (5v)
+  ADMUX  |= (1<<REFS0);
+
+  // we're aiming for a adc clock speed between 50kHz and 200kHz.
+  // our main clock is 16MHz, so we'll use a prescaler of 128 to set the final
+  // adc clock to 125kHz.
+  ADCSRA |= (1<<ADPS2) | (1<<ADPS1) | (1<<ADPS0);
+
+  //enable ADC
+  ADCSRA |= (1<<ADEN);
 }
 
 void MonoCap::calibrate() {
@@ -52,6 +58,10 @@ void MonoCap::calibrate() {
   touch_threshold = mean + stdev * 3;
 }
 
+void MonoCap::suppress() {
+  enablePullup();
+}
+
 uint16_t MonoCap::measure() {
   int16_t sum = 0;
   for (int i = 0; i < num_samples; i++) {
@@ -75,7 +85,6 @@ uint8_t MonoCap::measureNormalized() {
 }
 
 void MonoCap::setRange(uint16_t min, uint16_t max) {
-  // this->min = min;
   this->max = max;
 }
 
@@ -88,10 +97,14 @@ inline void MonoCap::disablePullup() {
 }
 
 static inline uint16_t adc_measure() {
-  ADCSRA |= (1<<ADSC); //start conversion
-  while(!(ADCSRA & (1<<ADIF))); //wait for conversion to finish
-  ADCSRA |= (1<<ADIF); //reset the flag
-  return ADC; //return value
+  // start conversion
+  ADCSRA |= (1<<ADSC);
+  // wait for conversion to finish
+  while(!(ADCSRA & (1<<ADIF)));
+  // reset the flag
+  ADCSRA |= (1<<ADIF);
+  // return value
+  return ADC; 
 }
 
 static inline void groundInternalCap() {
@@ -99,25 +112,24 @@ static inline void groundInternalCap() {
   ADMUX &= ~0b1111;
   ADMUX |= 0b1111;
   // do a measurement to discharge the sampling cap
-  // Serial.print("Measure inside groundInternalCap: ");
-  // Serial.println();
   adc_measure();
 }
 
 uint16_t MonoCap::measureInternal() {
+  // charge the external electrode
   // enable pullup
   enablePullup();
   // wait until the external cap is charged
-  delay(1);
+  delayMicroseconds(100);
   // disable pullup
   disablePullup();
 
   // ground and discharge the internal cap
   groundInternalCap();
 
+  // connect to the external electrode and take a measurement
   // connect internal cap to external cap
   ADMUX &= ~(0b1111);
   ADMUX |= adc_pin;
-  // uint16_t measurement = adc_measure();
   return adc_measure();
 }

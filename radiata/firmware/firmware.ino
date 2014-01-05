@@ -36,14 +36,21 @@ void setup() {
   Timer1.attachInterrupt(tickISR, 20);
 
   electrode90.init();
+  electrode210.init();
+  electrode330.init();
+  
+  electrode210.suppress();
+  electrode330.suppress();
   electrode90.calibrate();
   // electrode90.setRange(8050, 9500);
   // electrode90.measureNormalized();
-  electrode210.init();
+
+  electrode90.suppress();
   electrode210.calibrate();
   // electrode210.measureNormalized();
   // electrode210.setRange(8000, 9500);
-  electrode330.init();
+
+  electrode210.suppress();
   electrode330.calibrate();
   // electrode330.measureNormalized();
   // electrode330.setRange(8000, 9500);
@@ -52,30 +59,41 @@ void setup() {
 void loop() {
   // testSequence();
   // fastStrobe();
-  // touchTest();
-  wheelTest();
+  touchTest();
+  // wheelTest();
 }
 
 void wheelTest() {
   int lastOn = -1;
   while (true) {
     delay(100);
+    // plex.clear();
+    // int16_t orientation = wheel.getOrientation();
+    // if (orientation == NOT_TOUCHED) {
+    //   plex.clear();
+    // } else {
+    //   display3Digits(orientation);
+    // }
+
+    
 
     if (lastOn != -1) {
       plex.setDuty(mins2leds[lastOn], 0);
       lastOn = -1;
     }
-
+    
+    plex.clear();
     int16_t o1 = wheel.getOrientation();
-    int16_t o2 = wheel.getOrientation();
-    int16_t o3 = wheel.getOrientation();
-
-    if (o1 == NOT_TOUCHED || o2 == NOT_TOUCHED || o3 == NOT_TOUCHED) {
-      continue;
-    }
-
-    int16_t orientation = (o1 + o2 + o3) / 3;
-
+    // // int16_t o2 = wheel.getOrientation();
+    // // int16_t o3 = wheel.getOrientation();
+    // // 
+    // if (o1 == NOT_TOUCHED /*|| o2 == NOT_TOUCHED || o3 == NOT_TOUCHED*/) {
+    //   continue;
+    // }
+    // 
+    // // int16_t orientation = (o1 + o2 + o3) / 3;
+    int16_t orientation = o1;
+    
     if (orientation != NOT_TOUCHED) {
       lastOn = orientation / 6;
       plex.setDuty(mins2leds[orientation / 6], DUTY_MAX);
@@ -87,41 +105,43 @@ void wheelTest() {
 
 void touchTest() {
   while (true) {
+    // electrode210.suppress();
+    // electrode330.suppress();
     uint8_t val = electrode90.measureNormalized();
-    // displayByte(val);
-    for (int i = 0; i < 60; i++) {
-      if (i < val / (255.0 / 60)) {
-        plex.setDuty(mins2leds[i], DUTY_MAX);
-      } else {
-        plex.setDuty(mins2leds[i], 0);
-      }
-    
-      // plex.setDuty(mins2leds[i * 3 + 1], DUTY_MAX);
-      // plex.setDuty(mins2leds[i * 3 + 2], DUTY_MAX);
-    }
+    display3Digits(val);
+    // for (int i = 0; i < 60; i++) {
+    //   if (i < val / (255.0 / 60)) {
+    //     plex.setDuty(mins2leds[i], DUTY_MAX);
+    //   } else {
+    //     plex.setDuty(mins2leds[i], 0);
+    //   }
+    // 
+    //   // plex.setDuty(mins2leds[i * 3 + 1], DUTY_MAX);
+    //   // plex.setDuty(mins2leds[i * 3 + 2], DUTY_MAX);
+    // }
 
-    delay(100);
+    delay(500);
     // plex.clear();
   }
 }
 
-void displayByte(uint8_t val) {
+void display3Digits(uint16_t val) {
   uint8_t x = val;
 
-  for (int i = 0; i < val % 10; i++) {
-    plex.setDuty(mins2leds[i + 20], DUTY_MAX);
+  for (int i = 0; i < 10; i++) {
+    plex.setDuty(mins2leds[i + 20], i < val % 10 ? DUTY_MAX : 0);
   }
   
   val /= 10;  
 
-  for (int i = 0; i < val % 10; i++) {
-    plex.setDuty(mins2leds[i + 10], DUTY_MAX);
+  for (int i = 0; i < 10; i++) {
+    plex.setDuty(mins2leds[i + 10], i < val % 10 ? DUTY_MAX : 0);
   }
 
   val /= 10;
 
-  for (int i = 0; i < val % 10; i++) {
-    plex.setDuty(mins2leds[i + 0], DUTY_MAX);
+  for (int i = 0; i < 10; i++) {
+    plex.setDuty(mins2leds[i + 0], i < val % 10 ? DUTY_MAX : 0);
   }
 }
 

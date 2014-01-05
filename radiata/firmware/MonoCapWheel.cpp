@@ -8,11 +8,25 @@ MonoCapWheel::MonoCapWheel(MonoCap *e1, MonoCap *e2, MonoCap *e3) {
   this->e3 = e3;
 }
 
+uint8_t collectReading(MonoCap *electrode, MonoCap *other1, MonoCap *other2) {
+  // other1->suppress();
+  // other2->suppress();
+  uint16_t sum = 0;
+  for (int i = 0; i < 10; i++) {
+    sum += electrode->measureNormalized();
+    // delayMicroseconds(500);
+  }
+  return sum / 10;
+}
+
 int16_t MonoCapWheel::getOrientation() {
-  // measure left, right, and outer values
-  uint8_t e1Val = e1->measureNormalized();
-  uint8_t e2Val = e2->measureNormalized();
-  uint8_t e3Val = e3->measureNormalized();
+  // uint8_t e1Val = e1->measureNormalized();
+  // uint8_t e2Val = e2->measureNormalized();
+  // uint8_t e3Val = e3->measureNormalized();
+
+  uint8_t e1Val = collectReading(e1, e2, e3);
+  uint8_t e2Val = collectReading(e2, e3, e1);
+  uint8_t e3Val = collectReading(e3, e1, e2);
 
   if (e1Val < MIN_TOUCH_THRESHOLD 
     && e2Val < MIN_TOUCH_THRESHOLD 

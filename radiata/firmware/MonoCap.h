@@ -10,6 +10,10 @@ public:
 
   void calibrate();
 
+  // reduce the potential for this electrode to interfere with nearby 
+  // electrodes during measurement. calling measure() will disable suppression.
+  void suppress();
+
   // Sample the touch electrode a number of times and return a result. Most 
   // noise should be filtered, so nonzero values represent actual signal.
   uint16_t measure();
