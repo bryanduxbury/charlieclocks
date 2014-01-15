@@ -9,11 +9,25 @@ pcba_z = 4;
 screw_head_d = 5;
 screw_shaft_d = 3;
 
-stand_width = 15;
+stand_width = 20;
+
+rest_angle = 15;
+
+acrylic_t = 1.6;
+
+tab_width = 3;
 
 module _clear_acrylic() {
   color([255/255, 255/255, 255/255, 0.5]) {
-    linear_extrude(center=true, height=1.6) {
+    linear_extrude(center=true, height=acrylic_t) {
+      child(0);
+    }
+  }
+}
+
+module _black_acrylic() {
+  color("black") {
+    linear_extrude(center=true, height=acrylic_t) {
       child(0);
     }
   }
@@ -84,54 +98,76 @@ module back() {
     // for (a = [30, 150]) {
     //   rotate([0, 0, a]) translate([13, 0, 0]) square(size=[6.25, 6.25], center=true);
     // }
-    
+
     // power cord
-    translate([0, -15, 0]) circle(r=1.75, $fn=12);
+    translate([0, -15, 0]) circle(r=1.75, $fn=32);
   }
 }
 
-module stand_piece1() {
-  assign(dim = pcba_y + pcba_z + 2)
+module stand_side() {
+  assign(h = pcba_x - 18 + 2)
+  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
   difference() {
-    circle(r=dim, $fn=120);
-    circle(r=dim - stand_width, $fn=120);
-    translate([0, -(dim)/2, 0]) 
-      square(size=[(dim) * 2, dim], center=true);
+    hull() {
+      translate([acrylic_t/2, h - acrylic_t/2, 0]) 
+        square(size=[acrylic_t, acrylic_t], center=true);
+        // circle(r=acrylic_t/2, $fn=36);
+
+      translate([acrylic_t/2, acrylic_t/2 / tan((90-rest_angle)/2), 0]) 
+        circle(r=acrylic_t/2, $fn=36);
+
+      rotate([0, 0, rest_angle]) translate([d-acrylic_t/2, acrylic_t/2, 0]) 
+        circle(r=acrylic_t/2, $fn=36);
+
+    }
+
+    rotate([0, 0, rest_angle]) translate([0, acrylic_t * 1.5, 0]) {
+      translate([3+tab_width/2, 0, 0]) square(size=[tab_width-l, acrylic_t-l], center=true);
+      translate([d - 3 - tab_width/2, 0, 0]) square(size=[tab_width-l, acrylic_t-l], center=true);
+    }
   }
 }
 
-module stand_piece2() {
-  assign(dim = pcba_y + pcba_z + 2)
-  difference() {
-    circle(r=dim, $fn=120);
-    circle(r=dim - stand_width, $fn=120);
-    translate([0, -(dim)/2, 0]) 
-      square(size=[(dim) * 2, dim], center=true);
+module stand_bottom() {
+  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
+  translate([0, -(d)/2, 0]) 
+  union() {
+    square(size=[stand_width-2*acrylic_t+l, d-6+l], center=true);
+    for (x=[-1,1], y=[-1,1]) {
+      translate([x * (stand_width-2*acrylic_t)/2, y * ((d-6) / 2 - tab_width/2), 0]) 
+        square(size=[acrylic_t*2+l, tab_width+l], center=true);
+    }
   }
-}
 
-module stand_back() {
-  
-}
-
-module stand_assembled() {
-  rotate([0, 45, 0]) {
-    stand_piece1();
-    rotate([0, 90, 0]) stand_piece2();
-  }
 }
 
 
 module assembled() {
   pcba();
   _clear_acrylic() midring();
-  translate([0, 0, 1.6]) _clear_acrylic() face_retainer();
-  translate([0, 0, 1.6 * 2]) _clear_acrylic() face();
+  translate([0, 0, acrylic_t]) _clear_acrylic() face_retainer();
+  translate([0, 0, acrylic_t * 2]) _clear_acrylic() face();
 
-  translate([0, 0, -1.6]) _clear_acrylic() back_retainer();
-  translate([0, 0, -1.6 * 2]) _clear_acrylic() back();
+  translate([0, 0, -acrylic_t]) _clear_acrylic() back_retainer();
+  translate([0, 0, -acrylic_t * 2]) _clear_acrylic() back();
+  for (x=[-1,1]) {
+    translate([x * (stand_width / 2 - acrylic_t/2), -pcba_x-2, -acrylic_t * 1.5]) rotate([0, 90, 0]) _clear_acrylic() stand_side();
+  }
+  
+  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
+  translate([0, -pcba_x - 2 + acrylic_t * 1.5, -acrylic_t * 1]) 
+    rotate([90+rest_angle, 0, 0]) 
+        _clear_acrylic() stand_bottom();
+
 }
 
-rotate([-15, 0, 0]) translate([0, 1.5 * 1.6, 0]) stand_assembled();
-rotate([75, 0, 0]) assembled();
+// a mock "ground" plane so we can see how the object rests
+translate([0, 0, -(pcba_x + 2) * cos(rest_angle) - 0.25]) 
+  cube(size=[200, 200, 0.5], center=true);
+
+rotate([90-rest_angle, 0, 0]) 
+  translate([0, 0, acrylic_t * 1.5]) 
+    assembled();
+
+
 
