@@ -116,13 +116,13 @@ module back() {
 module stand_side() {
   assign(h = pcba_x - 18 + 2)
   assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
-  !difference() {
+  difference() {
     union() {
       hull() {
-        translate([acrylic_t/2, h - acrylic_t/2, 0]) 
+        translate([acrylic_t/2-l/2, h - acrylic_t/2, 0]) 
           square(size=[acrylic_t, acrylic_t+l], center=true);
 
-        translate([acrylic_t/2, acrylic_t/2 / tan((90-rest_angle)/2), 0]) 
+        translate([acrylic_t/2-l/2, acrylic_t/2 / tan((90-rest_angle)/2), 0]) 
           circle(r=acrylic_t/2, $fn=36);
 
         rotate([0, 0, rest_angle]) translate([d-acrylic_t/2, acrylic_t/2, 0]) 
