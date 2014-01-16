@@ -83,6 +83,15 @@ module back_retainer() {
     rotate([0, 0, 90 * i]) {
       rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2-l/2, $fn=36);
     }
+    
+    for (x=[-1,1]) 
+    translate([x * (stand_width/2 - acrylic_t/2), -pcba_x-2, 0]) {
+      translate([0, pcba_x - 18 + 2 - tab_width/2, 0]) 
+        square(size=[acrylic_t-l, tab_width-l], center=true);
+      translate([0, acrylic_t/2 / tan((90-rest_angle)/2) + tab_width, 0]) 
+        square(size=[acrylic_t-l, tab_width-l], center=true);
+    }
+    
   }
 }
 
@@ -107,18 +116,23 @@ module back() {
 module stand_side() {
   assign(h = pcba_x - 18 + 2)
   assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
-  difference() {
-    hull() {
-      translate([acrylic_t/2, h - acrylic_t/2, 0]) 
-        square(size=[acrylic_t, acrylic_t], center=true);
-        // circle(r=acrylic_t/2, $fn=36);
+  !difference() {
+    union() {
+      hull() {
+        translate([acrylic_t/2, h - acrylic_t/2, 0]) 
+          square(size=[acrylic_t, acrylic_t+l], center=true);
 
-      translate([acrylic_t/2, acrylic_t/2 / tan((90-rest_angle)/2), 0]) 
-        circle(r=acrylic_t/2, $fn=36);
+        translate([acrylic_t/2, acrylic_t/2 / tan((90-rest_angle)/2), 0]) 
+          circle(r=acrylic_t/2, $fn=36);
 
-      rotate([0, 0, rest_angle]) translate([d-acrylic_t/2, acrylic_t/2, 0]) 
-        circle(r=acrylic_t/2, $fn=36);
+        rotate([0, 0, rest_angle]) translate([d-acrylic_t/2, acrylic_t/2, 0]) 
+          circle(r=acrylic_t/2, $fn=36);
+      }
 
+      translate([0, h - tab_width/2, 0]) 
+        square(size=[2 * acrylic_t, tab_width+l], center=true);
+      translate([0, acrylic_t/2 / tan((90-rest_angle)/2) + tab_width, 0]) 
+        square(size=[2 * acrylic_t, tab_width+l], center=true);
     }
 
     rotate([0, 0, rest_angle]) translate([0, acrylic_t * 1.5, 0]) {
