@@ -175,13 +175,13 @@ module assembled() {
 
 }
 
-// a mock "ground" plane so we can see how the object rests
-translate([0, 0, -(pcba_x + 2) * cos(rest_angle) - 0.25]) 
-  cube(size=[200, 200, 0.5], center=true);
+rotate([0, 0, $t * 360]) {
+  // a mock "ground" plane so we can see how the object rests
+  translate([0, 0, -(pcba_x + 2) * cos(rest_angle) - 0.25]) 
+    cube(size=[200, 200, 0.5], center=true);
 
-rotate([90-rest_angle, 0, 0]) 
-  translate([0, 0, acrylic_t * 1.5]) 
-    assembled();
-
-
+  rotate([90-rest_angle, 0, 0]) 
+    translate([0, 0, acrylic_t * 1.5]) 
+      assembled();
+}
 
