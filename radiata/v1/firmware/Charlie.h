@@ -13,6 +13,9 @@ class Charlie {
   void setDuty(int ledNum, uint8_t duty);
   void clear();
 
+  void pause();
+  void resume();
+
   void tick();
 
  private:
@@ -26,6 +29,9 @@ class Charlie {
   };
 
   volatile uint8_t curDuty;
+
+  volatile bool pauseRequested;
+  volatile bool paused;
 
   uint8_t tickCount;
   uint8_t curLED;

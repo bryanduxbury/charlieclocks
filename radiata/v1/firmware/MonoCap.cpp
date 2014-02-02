@@ -120,7 +120,7 @@ uint16_t MonoCap::measureInternal() {
   // enable pullup
   enablePullup();
   // wait until the external cap is charged
-  delayMicroseconds(100);
+  delayMicroseconds(10);
   // disable pullup
   disablePullup();
 
