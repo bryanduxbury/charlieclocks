@@ -46,26 +46,26 @@ module _outline(x, y, z) {
 
 module midring() {
   difference() {
-    _outline(pcba_x+2, pcba_y, pcba_z+2);
-    _outline(pcba_x, pcba_y, pcba_z);
+    _outline(pcba_x+3, pcba_y, pcba_z+3);
+    _outline(pcba_x+l, pcba_y, pcba_z+l);
   }
 }
 
 module face_retainer() {
   difference() {
-    _outline(pcba_x+2, pcba_y, pcba_z+2);
+    _outline(pcba_x+3, pcba_y, pcba_z+3);
     circle(r=38.75, $fn=120);
 
     for (i=[0:3])
     rotate([0, 0, 90 * i]) {
-      rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2, $fn=36);
+      rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2-l/2, $fn=36);
     }
   }
 }
 
 module face() {
   difference() {
-    _outline(pcba_x+2, pcba_y, pcba_z+2);
+    _outline(pcba_x+3, pcba_y, pcba_z+3);
 
     for (i=[0:3])
     rotate([0, 0, 90 * i]) {
@@ -76,12 +76,12 @@ module face() {
 
 module back_retainer() {
   difference() {
-    _outline(pcba_x+2, pcba_y, pcba_z+2);
+    _outline(pcba_x+3, pcba_y, pcba_z+3);
     circle(r=17, $fn=120);
 
     for (i=[0:3])
     rotate([0, 0, 90 * i]) {
-      rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2-l, $fn=36);
+      rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2-2*l, $fn=36);
     }
     
     for (x=[-1,1]) 
@@ -96,7 +96,7 @@ module back_retainer() {
 }
 
 module back() {
-  difference() {
+  !difference() {
     _outline(18, 19, 2);
     // for (i=[0:5]) {
     //   rotate([0, 0, 60 * i + 90]) 
@@ -105,11 +105,11 @@ module back() {
 
     // optional: cut outs for the switches
     for (a = [30, 150]) {
-      rotate([0, 0, a]) translate([13, 0, 0]) square(size=[6.25, 6.25], center=true);
+      rotate([0, 0, a]) translate([13, 0, 0]) square(size=[6.5, 6.5], center=true);
     }
 
     // power cord
-    translate([0, -15, 0]) circle(r=1.75, $fn=32);
+    translate([0, -15, 0]) circle(r=2, $fn=32);
   }
 }
 
