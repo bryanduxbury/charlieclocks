@@ -6,6 +6,8 @@ pcba_x = 40;
 pcba_y = 42;
 pcba_z = 4;
 
+outside_margin_w = 3;
+
 screw_head_d = 5.2;
 screw_shaft_d = 2.85;
 
@@ -46,14 +48,14 @@ module _outline(x, y, z) {
 
 module midring() {
   difference() {
-    _outline(pcba_x+3, pcba_y, pcba_z+3);
+    _outline(pcba_x+outside_margin_w, pcba_y, pcba_z+outside_margin_w);
     _outline(pcba_x+l, pcba_y, pcba_z+l);
   }
 }
 
 module face_retainer() {
   difference() {
-    _outline(pcba_x+3, pcba_y, pcba_z+3);
+    _outline(pcba_x+outside_margin_w, pcba_y, pcba_z+outside_margin_w);
     circle(r=38.75, $fn=120);
 
     for (i=[0:3])
@@ -65,7 +67,7 @@ module face_retainer() {
 
 module face() {
   difference() {
-    _outline(pcba_x+3, pcba_y, pcba_z+3);
+    _outline(pcba_x+outside_margin_w, pcba_y, pcba_z+outside_margin_w);
 
     for (i=[0:3])
     rotate([0, 0, 90 * i]) {
@@ -76,27 +78,26 @@ module face() {
 
 module back_retainer() {
   difference() {
-    _outline(pcba_x+3, pcba_y, pcba_z+3);
+    _outline(pcba_x+outside_margin_w, pcba_y, pcba_z+outside_margin_w);
     circle(r=17, $fn=120);
 
     for (i=[0:3])
     rotate([0, 0, 90 * i]) {
       rotate([0, 0, 45]) translate([pcba_y, 0, 0]) circle(r=screw_shaft_d/2-2*l, $fn=36);
     }
-    
+
     for (x=[-1,1]) 
-    translate([x * (stand_width/2 - acrylic_t/2), -pcba_x-2, 0]) {
-      translate([0, pcba_x - 18 + 2 - tab_width/2, 0]) 
+    translate([x * (stand_width/2 - acrylic_t/2), -pcba_x-outside_margin_w, 0]) {
+      translate([0, pcba_x - 18 + outside_margin_w - tab_width/2, 0]) 
         square(size=[acrylic_t-l, tab_width-l], center=true);
       translate([0, acrylic_t/2 / tan((90-rest_angle)/2) + tab_width, 0]) 
         square(size=[acrylic_t-l, tab_width-l], center=true);
     }
-    
   }
 }
 
 module back() {
-  !difference() {
+  difference() {
     _outline(18, 19, 2);
     // for (i=[0:5]) {
     //   rotate([0, 0, 60 * i + 90]) 
@@ -114,8 +115,8 @@ module back() {
 }
 
 module stand_side() {
-  assign(h = pcba_x - 18 + 2)
-  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
+  assign(h = pcba_x - 18 + outside_margin_w)
+  assign(d = (pcba_x + outside_margin_w) * 2 * sin(rest_angle)) 
   difference() {
     union() {
       hull() {
@@ -143,7 +144,7 @@ module stand_side() {
 }
 
 module stand_bottom() {
-  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
+  assign(d = (pcba_x + outside_margin_w) * 2 * sin(rest_angle)) 
   translate([0, -(d)/2, 0]) 
   union() {
     square(size=[stand_width-2*acrylic_t+l, d-6+l], center=true);
@@ -152,7 +153,6 @@ module stand_bottom() {
         square(size=[acrylic_t*2+l, tab_width+l], center=true);
     }
   }
-
 }
 
 
@@ -165,11 +165,12 @@ module assembled() {
   translate([0, 0, -acrylic_t]) _clear_acrylic() back_retainer();
   translate([0, 0, -acrylic_t * 2]) _clear_acrylic() back();
   for (x=[-1,1]) {
-    translate([x * (stand_width / 2 - acrylic_t/2), -pcba_x-2, -acrylic_t * 1.5]) rotate([0, 90, 0]) _clear_acrylic() stand_side();
+    translate([x * (stand_width / 2 - acrylic_t/2), -pcba_x-outside_margin_w, -acrylic_t * 1.5]) 
+      rotate([0, 90, 0]) _clear_acrylic() stand_side();
   }
   
-  assign(d = (pcba_x + 2) * 2 * sin(rest_angle)) 
-  translate([0, -pcba_x - 2 + acrylic_t * 1.5, -acrylic_t * 1]) 
+  assign(d = (pcba_x + outside_margin_w) * 2 * sin(rest_angle)) 
+  translate([0, -pcba_x - outside_margin_w + acrylic_t * 1.5, -acrylic_t * 1]) 
     rotate([90+rest_angle, 0, 0]) 
         _clear_acrylic() stand_bottom();
 
@@ -177,7 +178,7 @@ module assembled() {
 
 rotate([0, 0, $t * 360]) {
   // a mock "ground" plane so we can see how the object rests
-  translate([0, 0, -(pcba_x + 2) * cos(rest_angle) - 0.25]) 
+  translate([0, 0, -(pcba_x + outside_margin_w) * cos(rest_angle) - 0.25]) 
     cube(size=[200, 200, 0.5], center=true);
 
   rotate([90-rest_angle, 0, 0]) 
