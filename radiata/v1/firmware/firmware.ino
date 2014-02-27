@@ -102,7 +102,7 @@ void clock() {
 
     // check if we've rolled over another minute
     if (now >= start + 60000) {
-      start = now;
+      start += 60000;
       // turn off old minute
       displayMinute(minute, 0);
       minute++;
